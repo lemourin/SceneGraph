@@ -1,9 +1,8 @@
 QT = core gui quick
 CONFIG += c++11
-
+CONFIG -= debug_and_release
 TARGET = SceneGraph
 TEMPLATE = lib
-
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
