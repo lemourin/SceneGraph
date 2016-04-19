@@ -8,6 +8,7 @@ Material::Material() {}
 
 void ColorMaterial::ColorShader::initialize() {
   Shader::initialize();
+  initializeOpenGLFunctions();
 
   m_matrix = program()->uniformLocation("matrix");
   m_color = program()->uniformLocation("color");
