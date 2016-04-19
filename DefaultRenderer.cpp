@@ -1,10 +1,10 @@
 #include "DefaultRenderer.hpp"
-#include "Material.hpp"
-#include "Shader.hpp"
-#include "Node.hpp"
-#include "Geometry.hpp"
-#include <cassert>
 #include <QElapsedTimer>
+#include <cassert>
+#include "Geometry.hpp"
+#include "Material.hpp"
+#include "Node.hpp"
+#include "Shader.hpp"
 namespace SceneGraph {
 
 DefaultRenderer::DefaultRenderer() : Renderer() { initializeOpenGLFunctions(); }

@@ -1,9 +1,9 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
-#include "Item.hpp"
-#include "Node.hpp"
 #include "Geometry.hpp"
+#include "Item.hpp"
 #include "Material.hpp"
+#include "Node.hpp"
 
 namespace SceneGraph {
 

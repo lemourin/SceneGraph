@@ -1,8 +1,8 @@
 #include "Camera.hpp"
-#include "Window.hpp"
-#include "Geometry.hpp"
-#include <QKeyEvent>
 #include <QCursor>
+#include <QKeyEvent>
+#include "Geometry.hpp"
+#include "Window.hpp"
 
 namespace SceneGraph {
 

@@ -1,11 +1,11 @@
 #ifndef SHADERSOURCE_HPP
 #define SHADERSOURCE_HPP
 
-#include "Item.hpp"
-#include "Node.hpp"
+#include <QColor>
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLFunctions>
-#include <QColor>
+#include "Item.hpp"
+#include "Node.hpp"
 
 namespace SceneGraph {
 

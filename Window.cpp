@@ -1,11 +1,11 @@
 #include "Window.hpp"
+#include <QOpenGLFramebufferObject>
+#include <QQuickItem>
+#include <QThread>
+#include <cassert>
+#include <functional>
 #include "DefaultRenderer.hpp"
 #include "Node.hpp"
-#include <functional>
-#include <QThread>
-#include <QQuickItem>
-#include <QOpenGLFramebufferObject>
-#include <cassert>
 
 namespace SceneGraph {
 
@@ -222,8 +222,7 @@ void Window::mousePressEvent(QMouseEvent* event) {
 
   if (!item) event->ignore();
 
-  if (rootObject())
-    rootObject()->forceActiveFocus();
+  if (rootObject()) rootObject()->forceActiveFocus();
 }
 
 void Window::mouseReleaseEvent(QMouseEvent* event) {

@@ -1,6 +1,6 @@
 #include "Material.hpp"
-#include "Renderer.hpp"
 #include <cassert>
+#include "Renderer.hpp"
 
 namespace SceneGraph {
 

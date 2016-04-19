@@ -1,10 +1,10 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
-#include "Item.hpp"
-#include "Node.hpp"
-#include "Material.hpp"
-#include "Geometry.hpp"
 #include <string>
+#include "Geometry.hpp"
+#include "Item.hpp"
+#include "Material.hpp"
+#include "Node.hpp"
 
 namespace SceneGraph {
 

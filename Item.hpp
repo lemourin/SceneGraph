@@ -1,7 +1,7 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
-#include "BaseObject.hpp"
 #include <QMatrix4x4>
+#include "BaseObject.hpp"
 
 class QKeyEvent;
 class QTouchEvent;
@@ -15,7 +15,7 @@ class Node;
 class TransformNode;
 
 class Item : protected BaseObject {
-private:
+ private:
   friend class Window;
   friend class Renderer;
   friend class ShaderSource;
@@ -36,7 +36,7 @@ private:
     VisibleChanged = 1u << 5,
   };
 
-protected:
+ protected:
   virtual Node *synchronize(Node *old);
 
   virtual void visibleChanged();
@@ -52,7 +52,7 @@ protected:
   virtual void wheelEvent(QWheelEvent *);
   virtual void timerEvent(QTimerEvent *);
 
-public:
+ public:
   Item(Item *parent = nullptr);
   ~Item();
 
@@ -102,4 +102,4 @@ public:
 };
 }
 
-#endif // ITEM_HPP
+#endif  // ITEM_HPP

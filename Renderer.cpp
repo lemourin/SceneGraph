@@ -1,13 +1,13 @@
 #include "Renderer.hpp"
-#include "Node.hpp"
-#include "Geometry.hpp"
-#include "Material.hpp"
-#include "Shader.hpp"
-#include "Window.hpp"
-#include <cassert>
 #include <QColor>
 #include <QOpenGLTexture>
 #include <QThread>
+#include <cassert>
+#include "Geometry.hpp"
+#include "Material.hpp"
+#include "Node.hpp"
+#include "Shader.hpp"
+#include "Window.hpp"
 
 namespace SceneGraph {
 
@@ -74,17 +74,17 @@ void Renderer::updateNodes(Window* window) {
 
   std::vector<Item*> nextFrame;
   for (size_t i = 0; i < window->m_updateItem.size(); i++) {
-      Item* item = window->m_updateItem[i];
-      item->m_state &= ~Item::ScheduledUpdate;
-      updateItem(item);
+    Item* item = window->m_updateItem[i];
+    item->m_state &= ~Item::ScheduledUpdate;
+    updateItem(item);
 
-      if (item->m_state & Item::ScheduledUpdate) {
-          nextFrame.push_back(item);
-          assert(item == window->m_updateItem.back());
-          auto it = std::find(window->m_updateItem.rbegin(),
-                              window->m_updateItem.rend(), item);
-          window->m_updateItem.erase(it.base() - 1);
-      }
+    if (item->m_state & Item::ScheduledUpdate) {
+      nextFrame.push_back(item);
+      assert(item == window->m_updateItem.back());
+      auto it = std::find(window->m_updateItem.rbegin(),
+                          window->m_updateItem.rend(), item);
+      window->m_updateItem.erase(it.base() - 1);
+    }
   }
 
   window->m_updateItem = nextFrame;

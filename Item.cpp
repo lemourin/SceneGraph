@@ -1,9 +1,9 @@
 #include "Item.hpp"
-#include "Window.hpp"
+#include <cassert>
 #include "Node.hpp"
 #include "Renderer.hpp"
 #include "Window.hpp"
-#include <cassert>
+#include "Window.hpp"
 
 namespace SceneGraph {
 
@@ -208,13 +208,11 @@ void Item::invalidate() {
 
 void Item::updateSubtree() {
   update();
-  for (Item* i = firstChild(); i; i = i->next())
-    i->updateSubtree();
+  for (Item* i = firstChild(); i; i = i->next()) i->updateSubtree();
 }
 
 void Item::invalidateSubtree() {
   invalidate();
   for (Item* i = firstChild(); i; i = i->next()) i->invalidateSubtree();
 }
-
 }

@@ -1,6 +1,6 @@
 #include "BaseObject.hpp"
-#include <cassert>
 #include <QDebug>
+#include <cassert>
 
 namespace SceneGraph {
 

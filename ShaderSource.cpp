@@ -1,8 +1,8 @@
 #include "ShaderSource.hpp"
+#include <QTime>
+#include <cassert>
 #include "Renderer.hpp"
 #include "Window.hpp"
-#include <cassert>
-#include <QTime>
 
 namespace SceneGraph {
 
@@ -99,5 +99,4 @@ void ShaderSource::ShaderNode::update(ShaderSource* i) {
   m_viewport = i->m_sourceRect;
   m_size = i->m_textureSize;
 }
-
 }

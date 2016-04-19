@@ -1,7 +1,7 @@
 #ifndef SCENEGRAPH_WINDOW_HPP
 #define SCENEGRAPH_WINDOW_HPP
-#include <QQuickView>
 #include <QQuickItem>
+#include <QQuickView>
 #include <unordered_map>
 #include <unordered_set>
 #include "Item.hpp"

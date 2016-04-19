@@ -1,9 +1,9 @@
 ﻿#ifndef MATERIAL_HPP
 #define MATERIAL_HPP
-#include "Shader.hpp"
 #include <QColor>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
+#include "Shader.hpp"
 
 namespace SceneGraph {
 
