@@ -36,8 +36,8 @@ class Window : public QQuickView {
   Item m_root;
   Item* m_focusItem;
   std::vector<Item*> m_updateItem;
-  std::vector<Node*> m_destroyedItemNode;
-  std::vector<Node*> m_destroyedNode;
+  std::vector<std::unique_ptr<Node>> m_destroyedItemNode;
+  std::vector<std::unique_ptr<Node>> m_destroyedNode;
 
   std::unordered_map<int, Item*> m_timerItem;
   std::unordered_map<Item*, std::unordered_set<int>> m_timerMap;

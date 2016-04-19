@@ -91,11 +91,9 @@ void Window::onItemDestroyed(Item* item) {
 }
 
 void Window::destroyNode(Item* item) {
-  if (item->m_itemNode) m_destroyedItemNode.push_back(item->m_itemNode);
-  if (item->m_node) m_destroyedNode.push_back(item->m_node);
-
-  item->m_itemNode = nullptr;
-  item->m_node = nullptr;
+  if (item->m_itemNode)
+    m_destroyedItemNode.push_back(std::move(item->m_itemNode));
+  if (item->m_node) m_destroyedNode.push_back(std::move(item->m_node));
 }
 
 void Window::scheduleUpdate(Item* item) {

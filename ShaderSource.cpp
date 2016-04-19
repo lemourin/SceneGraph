@@ -39,16 +39,12 @@ void ShaderSource::invalidate() {
   m_node = nullptr;
 }
 
-Node* ShaderSource::synchronize(Node* old) {
-  ShaderNode* node = static_cast<ShaderNode*>(old);
-
+std::unique_ptr<Node> ShaderSource::synchronize(std::unique_ptr<Node> node) {
   if (!node) {
-    node = new ShaderNode(textureSize());
-    m_node = node;
+    node = std::make_unique<ShaderNode>(textureSize());
+    m_node = static_cast<ShaderNode*>(node.get());
   }
-
-  node->update(this);
-
+  static_cast<ShaderNode*>(node.get())->update(this);
   return node;
 }
 
@@ -66,9 +62,8 @@ void ShaderSource::ShaderNode::updateTexture() {
   m_lastUpdate = renderer()->frame();
 
   assert(m_size.isValid());
-  if (!m_fbo || m_fbo->size() != m_size) {
+  if (!m_fbo || m_fbo->size() != m_size)
     m_fbo = std::make_unique<QOpenGLFramebufferObject>(m_size);
-  }
 
   m_fbo->bind();
 
@@ -93,7 +88,7 @@ void ShaderSource::ShaderNode::updateTexture() {
 }
 
 void ShaderSource::ShaderNode::update(ShaderSource* i) {
-  m_capturedNode = i->m_sourceItem.m_itemNode;
+  m_capturedNode = i->m_sourceItem.m_itemNode.get();
   m_background = i->m_background;
   m_viewport = i->m_sourceRect;
   m_size = i->m_textureSize;

@@ -13,9 +13,7 @@ namespace SceneGraph {
 
 Renderer::Renderer() : m_root(), m_frame(1) {}
 
-Renderer::~Renderer() {
-  for (const auto& p : m_texture) delete p.second;
-}
+Renderer::~Renderer() {}
 
 void Renderer::updateItem(Item* item) {
   if (item->m_state & Item::ModelMatrixChanged) {
@@ -26,8 +24,8 @@ void Renderer::updateItem(Item* item) {
   }
 
   if (item->m_state & Item::ParentChanged) {
-    Node* current = item->m_itemNode;
-    Node* parent = item->parent() ? item->parent()->m_itemNode : nullptr;
+    Node* current = item->m_itemNode.get();
+    Node* parent = item->parent() ? item->parent()->m_itemNode.get() : nullptr;
     if (current->parent() != parent && item->visible()) {
       if (current->parent()) current->parent()->removeChild(current);
       if (parent) parent->appendChild(current);
@@ -42,21 +40,16 @@ void Renderer::updateItem(Item* item) {
     if (item->parent()) {
       assert(item->parent()->m_itemNode);
       if (!item->visible())
-        item->parent()->m_itemNode->removeChild(item->m_itemNode);
+        item->parent()->m_itemNode->removeChild(item->m_itemNode.get());
       else
-        item->parent()->m_itemNode->appendChild(item->m_itemNode);
+        item->parent()->m_itemNode->appendChild(item->m_itemNode.get());
     }
   }
 
   if (item->visible()) {
-    Node* node = item->synchronize(item->m_node);
-    if (node != item->m_node) {
-      delete item->m_node;
-      item->m_node = node;
-
-      if (node && node->parent() == nullptr)
-        item->m_itemNode->appendChild(node);
-    }
+    item->m_node = item->synchronize(std::move(item->m_node));
+    if (item->m_node && item->m_node->parent() == nullptr)
+      item->m_itemNode->appendChild(item->m_node.get());
   }
 }
 
@@ -65,7 +58,7 @@ void Renderer::updateNodes(Window* window) {
 
   for (Item* item : window->m_updateItem) {
     if (item->m_itemNode == nullptr) {
-      item->m_itemNode = new TransformNode;
+      item->m_itemNode = std::make_unique<TransformNode>();
       item->m_itemNode->setRenderer(this);
 
       item->m_state |= Item::ModelMatrixChanged | Item::ParentChanged;
@@ -94,20 +87,13 @@ void Renderer::updateNodes(Window* window) {
 }
 
 void Renderer::destroyNodes(Window* window) {
-  while (!window->m_destroyedItemNode.empty()) {
-    Node* itemNode = window->m_destroyedItemNode.back();
+  for (auto& itemNode : window->m_destroyedItemNode) {
     assert(itemNode);
-    window->m_destroyedItemNode.pop_back();
     while (itemNode->firstChild())
       itemNode->removeChild(itemNode->firstChild());
-    delete itemNode;
   }
-
-  while (!window->m_destroyedNode.empty()) {
-    Node* node = window->m_destroyedNode.back();
-    window->m_destroyedNode.pop_back();
-    delete node;
-  }
+  window->m_destroyedItemNode.clear();
+  window->m_destroyedNode.clear();
 }
 
 void Renderer::render(Node* root, RenderState state) {
@@ -164,11 +150,11 @@ void Renderer::setRoot(Item* item) {
   }
 
   if (!item->m_itemNode) {
-    item->m_itemNode = new TransformNode;
+    item->m_itemNode = std::make_unique<TransformNode>();
     item->m_itemNode->setRenderer(this);
   }
 
-  m_root = item->m_itemNode;
+  m_root = item->m_itemNode.get();
 }
 
 QOpenGLTexture* Renderer::texture(const char* path) {
@@ -176,12 +162,12 @@ QOpenGLTexture* Renderer::texture(const char* path) {
     QImage image(path);
     assert(!image.isNull());
 
-    QOpenGLTexture* texture = new QOpenGLTexture(image);
+    auto texture = std::make_unique<QOpenGLTexture>(image);
     texture->setMinMagFilters(QOpenGLTexture::Linear, QOpenGLTexture::Linear);
-    m_texture[path] = texture;
+    m_texture[path] = std::move(texture);
   }
 
-  return m_texture[path];
+  return m_texture[path].get();
 }
 
 RenderState::RenderState(QMatrix4x4 m) : m_matrix(m) {}

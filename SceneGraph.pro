@@ -9,10 +9,8 @@ MOC_DIR = .moc
 SOURCES += \
     BaseObject.cpp \
     Camera.cpp \
-    Cube.cpp \
     DefaultRenderer.cpp \
     Geometry.cpp \
-    Image.cpp \
     Item.cpp \
     Material.cpp \
     Node.cpp \
@@ -24,9 +22,7 @@ SOURCES += \
 HEADERS += \
     BaseObject.hpp \
     Camera.hpp \
-    Cube.hpp \
     Geometry.hpp \
-    Image.hpp \
     Item.hpp \
     Material.hpp \
     Node.hpp \

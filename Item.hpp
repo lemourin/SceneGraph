@@ -1,6 +1,7 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 #include <QMatrix4x4>
+#include <memory>
 #include "BaseObject.hpp"
 
 class QKeyEvent;
@@ -21,8 +22,8 @@ class Item : protected BaseObject {
   friend class ShaderSource;
 
   Window *m_window;
-  TransformNode *m_itemNode;
-  Node *m_node;
+  std::unique_ptr<TransformNode> m_itemNode;
+  std::unique_ptr<Node> m_node;
   unsigned m_state;
   QMatrix4x4 m_matrix;
   unsigned m_lastUpdate;
@@ -37,7 +38,7 @@ class Item : protected BaseObject {
   };
 
  protected:
-  virtual Node *synchronize(Node *old);
+  virtual std::unique_ptr<Node> synchronize(std::unique_ptr<Node> old);
 
   virtual void visibleChanged();
   virtual void focusChanged();

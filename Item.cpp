@@ -168,7 +168,9 @@ void Item::setWindow(Window* window) {
     item->setWindow(window);
 }
 
-Node* Item::synchronize(Node*) { return nullptr; }
+std::unique_ptr<Node> Item::synchronize(std::unique_ptr<Node>) {
+  return nullptr;
+}
 
 void Item::visibleChanged() {}
 

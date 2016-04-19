@@ -1,6 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 #include <QMatrix4x4>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -36,7 +37,7 @@ class Renderer {
   RenderState m_state;
   QSize m_size;
   uint m_frame;
-  std::unordered_map<std::string, QOpenGLTexture*> m_texture;
+  std::unordered_map<std::string, std::unique_ptr<QOpenGLTexture>> m_texture;
   std::unordered_set<Node*> m_preprocess;
 
   void updateItem(Item*);

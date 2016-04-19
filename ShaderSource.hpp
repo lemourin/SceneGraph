@@ -41,7 +41,7 @@ class ShaderSource : public SceneGraph::Item {
   ShaderNode* m_node;
 
  protected:
-  Node* synchronize(Node* old);
+  std::unique_ptr<Node> synchronize(std::unique_ptr<Node> old);
 
  public:
   explicit ShaderSource(SceneGraph::Item* parent = nullptr);
