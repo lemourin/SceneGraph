@@ -11,11 +11,15 @@ void ColorMaterial::ColorShader::initialize() {
 
   m_matrix = program()->uniformLocation("matrix");
   m_color = program()->uniformLocation("color");
+
+  glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
 const char* ColorMaterial::ColorShader::vertexShader() const {
-  return GLSL(attribute vec4 position; uniform mat4 matrix;
-              void main() { gl_Position = matrix * position; });
+  return GLSL(attribute vec4 position; uniform mat4 matrix; void main() {
+    gl_PointSize = 4.0;
+    gl_Position = matrix * position;
+  });
 }
 
 const char* ColorMaterial::ColorShader::fragmentShader() const {
