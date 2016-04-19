@@ -1,5 +1,5 @@
 QT = core gui quick
-CONFIG += c++11
+CONFIG += c++14
 CONFIG -= debug_and_release
 TARGET = SceneGraph
 TEMPLATE = lib

@@ -13,7 +13,7 @@ class SingletonImpl {
  private:
   std::unique_ptr<T> m_data;
 
-  SingletonImpl() : m_data(new T) {}
+  SingletonImpl() : m_data(std::make_unique<T>()) {}
 
  public:
   static SingletonImpl* instance() {

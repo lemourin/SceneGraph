@@ -55,7 +55,7 @@ QOpenGLTexture* Window::texture(const char* path) {
 }
 
 void Window::onSceneGraphInitialized() {
-  m_renderer = new DefaultRenderer;
+  m_renderer = std::make_unique<DefaultRenderer>();
   m_renderer->setRoot(rootItem());
   rootItem()->updateSubtree();
 }
@@ -65,7 +65,6 @@ void Window::onSceneGraphInvalidated() {
   rootItem()->invalidateSubtree();
   m_renderer->synchronize(this);
 
-  delete m_renderer;
   m_renderer = nullptr;
 }
 

@@ -57,7 +57,7 @@ ShaderSource::ShaderNode::ShaderNode(QSize size, Node* parent)
   initializeOpenGLFunctions();
 }
 
-ShaderSource::ShaderNode::~ShaderNode() { delete m_fbo; }
+ShaderSource::ShaderNode::~ShaderNode() {}
 
 void ShaderSource::ShaderNode::updateTexture() {
   assert(renderer());
@@ -67,8 +67,7 @@ void ShaderSource::ShaderNode::updateTexture() {
 
   assert(m_size.isValid());
   if (!m_fbo || m_fbo->size() != m_size) {
-    delete m_fbo;
-    m_fbo = new QOpenGLFramebufferObject(m_size);
+    m_fbo = std::make_unique<QOpenGLFramebufferObject>(m_size);
   }
 
   m_fbo->bind();

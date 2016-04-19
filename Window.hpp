@@ -2,6 +2,7 @@
 #define SCENEGRAPH_WINDOW_HPP
 #include <QQuickItem>
 #include <QQuickView>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include "Item.hpp"
@@ -29,7 +30,7 @@ class Window : public QQuickView {
     RootItem(Window*, QQuickItem* = nullptr);
   } m_rootItem;
 
-  Renderer* m_renderer;
+  std::unique_ptr<Renderer> m_renderer;
   QMatrix4x4 m_projection;
 
   Item m_root;

@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLFunctions>
+#include <memory>
 #include "Item.hpp"
 #include "Node.hpp"
 
@@ -15,7 +16,7 @@ class ShaderSource : public SceneGraph::Item {
    private:
     friend class ShaderSource;
 
-    QOpenGLFramebufferObject* m_fbo;
+    std::unique_ptr<QOpenGLFramebufferObject> m_fbo;
     TransformNode* m_capturedNode;
     QColor m_background;
     QSize m_size;
@@ -29,7 +30,7 @@ class ShaderSource : public SceneGraph::Item {
     ~ShaderNode();
 
     void updateTexture();
-    inline QOpenGLFramebufferObject* texture() { return m_fbo; }
+    inline QOpenGLFramebufferObject* texture() { return m_fbo.get(); }
   };
 
  private:
