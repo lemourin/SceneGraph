@@ -97,17 +97,17 @@ QMatrix4x4 Item::effectiveMatrix() const {
   return matrix;
 }
 
-QPointF Item::mapToItem(Item* item, QPointF p) {
-  return item->effectiveMatrix() * mapToScreen(p);
+QPointF Item::mapToItem(const Item* item, QPointF p) const {
+  return item->mapFromItem(this, p);
 }
 
-QPointF Item::mapToScreen(QPointF p) { return effectiveMatrix() * p; }
+QPointF Item::mapToScreen(QPointF p) const { return effectiveMatrix() * p; }
 
-QPointF Item::mapFromItem(Item* item, QPointF p) {
-  return item->mapToItem(this, p);
+QPointF Item::mapFromItem(const Item* item, QPointF p) const {
+  return effectiveMatrix().inverted() * item->mapToScreen(p);
 }
 
-QPointF Item::mapFromScreen(QPointF p) {
+QPointF Item::mapFromScreen(QPointF p) const {
   return effectiveMatrix().inverted() * p;
 }
 

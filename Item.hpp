@@ -79,11 +79,11 @@ class Item : protected BaseObject {
 
   QMatrix4x4 effectiveMatrix() const;
 
-  QPointF mapToItem(Item *, QPointF);
-  QPointF mapToScreen(QPointF);
+  QPointF mapToItem(const Item *, QPointF) const;
+  QPointF mapToScreen(QPointF) const;
 
-  QPointF mapFromItem(Item *, QPointF);
-  QPointF mapFromScreen(QPointF);
+  QPointF mapFromItem(const Item *, QPointF) const;
+  QPointF mapFromScreen(QPointF) const;
 
   inline bool focus() const { return m_state & HasFocus; }
   void setFocus(bool);
