@@ -28,7 +28,8 @@ Window::Window(QWindow* parent)
       m_rootItem(this, contentItem()),
       m_renderer(),
       m_focusItem(),
-      m_lockedCursor() {
+      m_lockedCursor(),
+      m_allowLockCursor(true) {
   m_root.setWindow(this);
 
   connect(this, &QQuickWindow::sceneGraphInitialized, this,
@@ -297,7 +298,7 @@ void Window::resizeEvent(QResizeEvent* event) {
   m_rootItem.setSize(event->size());
   scheduleSynchronize();
 #ifdef Q_OS_WIN
-  if (lockedCursor()) lockCursor();
+  if (lockedCursor() && allowLockCursor()) lockCursor();
 #endif
 }
 
@@ -311,15 +312,23 @@ void Window::RootItem::touchEvent(QTouchEvent* e) {
 
 void Window::setLockedCursor(bool e) {
   if (m_lockedCursor == e) return;
-
+  m_lockedCursor = e;
   if (e) {
-    if (lockCursor()) {
-      m_lockedCursor = true;
-    }
+    if (allowLockCursor())
+      lockCursor();
   } else {
-    if (unlockCursor()) {
-      m_lockedCursor = false;
-    }
+    if (allowLockCursor())
+      unlockCursor();
+  }
+}
+
+void Window::setAllowLockCursor(bool e) {
+  if (m_allowLockCursor == e) return;
+  m_allowLockCursor = e;
+  if (e) {
+    if (lockedCursor()) lockCursor();
+  } else {
+    if (lockedCursor()) unlockCursor();
   }
 }
 
@@ -356,7 +365,7 @@ bool Window::unlockCursor() {
 }
 
 void Window::onActiveChanged() {
-  if (lockedCursor()) {
+  if (lockedCursor() && allowLockCursor()) {
     if (isActive())
       assert(lockCursor());
     else

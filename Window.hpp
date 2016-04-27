@@ -43,6 +43,7 @@ class Window : public QQuickView {
   std::unordered_map<Item*, std::unordered_set<int>> m_timerMap;
 
   bool m_lockedCursor;
+  bool m_allowLockCursor;
 
   void onSceneGraphInitialized();
   void onSceneGraphInvalidated();
@@ -89,6 +90,9 @@ class Window : public QQuickView {
 
   inline bool lockedCursor() const { return m_lockedCursor; }
   void setLockedCursor(bool);
+
+  inline bool allowLockCursor() const { return m_allowLockCursor; }
+  void setAllowLockCursor(bool);
 };
 }  //  namespace SceneGraph
 
