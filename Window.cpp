@@ -7,13 +7,28 @@
 #include "DefaultRenderer.hpp"
 #include "Node.hpp"
 
+#if defined(Q_OS_LINUX) and not defined(Q_OS_ANDROID)
+#define USE_X11
+#endif
+
+#ifdef USE_X11
+#include <X11/Xlib.h>
+#include <unistd.h>
+#include <QX11Info>
+#endif
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 namespace SceneGraph {
 
 Window::Window(QWindow* parent)
     : QQuickView(parent),
       m_rootItem(this, contentItem()),
       m_renderer(),
-      m_focusItem() {
+      m_focusItem(),
+      m_lockedCursor() {
   m_root.setWindow(this);
 
   connect(this, &QQuickWindow::sceneGraphInitialized, this,
@@ -24,6 +39,8 @@ Window::Window(QWindow* parent)
           &Window::onBeforeRendering, Qt::DirectConnection);
   connect(this, &QQuickWindow::beforeSynchronizing, this,
           &Window::onBeforeSynchronizing, Qt::DirectConnection);
+
+  connect(this, &QWindow::activeChanged, this, &Window::onActiveChanged);
 
   setResizeMode(SizeRootObjectToView);
   setClearBeforeRendering(false);
@@ -41,6 +58,7 @@ Window::~Window() {
              &Window::onBeforeRendering);
   disconnect(this, &QQuickWindow::beforeSynchronizing, this,
              &Window::onBeforeSynchronizing);
+  unlockCursor();
 }
 
 void Window::setProjection(const QMatrix4x4& m) {
@@ -278,6 +296,9 @@ void Window::resizeEvent(QResizeEvent* event) {
   QQuickView::resizeEvent(event);
   m_rootItem.setSize(event->size());
   scheduleSynchronize();
+#ifdef Q_OS_WIN
+  if (lockedCursor()) lockCursor();
+#endif
 }
 
 Window::RootItem::RootItem(Window* w, QQuickItem* parent)
@@ -287,4 +308,59 @@ void Window::RootItem::touchEvent(QTouchEvent* e) {
   m_window->touchEvent(e);
   e->accept();
 }
+
+void Window::setLockedCursor(bool e) {
+  if (m_lockedCursor == e) return;
+
+  if (e) {
+    if (lockCursor()) {
+      m_lockedCursor = true;
+    }
+  } else {
+    if (unlockCursor()) {
+      m_lockedCursor = false;
+    }
+  }
 }
+
+bool Window::lockCursor() {
+#ifdef USE_X11
+  while (XGrabPointer(QX11Info::display(), winId(), true, 0, GrabModeAsync,
+                      GrabModeAsync, winId(), None, CurrentTime) != GrabSuccess)
+    sleep(1);
+  return true;
+#endif
+#ifdef Q_OS_WIN
+  QPoint p1 = mapToGlobal(QPoint(0, 0));
+  QPoint p2 = mapToGlobal(QPoint(width(), height()));
+  RECT rect;
+  rect.left = p1.x();
+  rect.top = p1.y();
+  rect.right = p2.x();
+  rect.bottom = p2.y();
+  ClipCursor(&rect);
+  return true;
+#endif
+}
+
+bool Window::unlockCursor() {
+#ifdef USE_X11
+  XUngrabPointer(QX11Info::display(), CurrentTime);
+  XFlush(QX11Info::display());
+  return true;
+#endif
+#ifdef Q_OS_WIN
+  ClipCursor(0);
+  return true;
+#endif
+}
+
+void Window::onActiveChanged() {
+  if (lockedCursor()) {
+    if (isActive())
+      assert(lockCursor());
+    else
+      unlockCursor();
+  }
+}
+}  // namespace SceneGraph

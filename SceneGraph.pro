@@ -31,3 +31,10 @@ HEADERS += \
     ShaderSource.hpp \
     DefaultRenderer.hpp \
     Renderer.hpp
+
+!android {
+  unix {
+    QT += x11extras
+    LIBS += -lX11
+  }
+}

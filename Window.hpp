@@ -42,6 +42,8 @@ class Window : public QQuickView {
   std::unordered_map<int, Item*> m_timerItem;
   std::unordered_map<Item*, std::unordered_set<int>> m_timerMap;
 
+  bool m_lockedCursor;
+
   void onSceneGraphInitialized();
   void onSceneGraphInvalidated();
   void onBeforeRendering();
@@ -54,6 +56,11 @@ class Window : public QQuickView {
 
   int installTimer(Item*, int interval);
   void removeTimer(Item*, int timerId);
+
+  void onActiveChanged();
+
+  bool lockCursor();
+  bool unlockCursor();
 
  protected:
   void keyPressEvent(QKeyEvent*);
@@ -79,7 +86,10 @@ class Window : public QQuickView {
   void scheduleSynchronize();
 
   QOpenGLTexture* texture(const char* path);
+
+  inline bool lockedCursor() const { return m_lockedCursor; }
+  void setLockedCursor(bool);
 };
-}
+}  //  namespace SceneGraph
 
 #endif  // SCENEGRAPH_WINDOW_HPP
