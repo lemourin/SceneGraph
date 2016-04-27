@@ -5,6 +5,7 @@ TARGET = SceneGraph
 TEMPLATE = lib
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
+android: QMAKE_CXXFLAGS += -std=c++14
 
 SOURCES += \
     BaseObject.cpp \

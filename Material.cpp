@@ -13,7 +13,9 @@ void ColorMaterial::ColorShader::initialize() {
   m_matrix = program()->uniformLocation("matrix");
   m_color = program()->uniformLocation("color");
 
+#ifdef GL_VERTEX_PROGRAM_POINT_SIZE
   glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+#endif
 }
 
 const char* ColorMaterial::ColorShader::vertexShader() const {
