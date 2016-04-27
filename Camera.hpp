@@ -21,6 +21,6 @@ class Camera : public Item {
  public:
   Camera(Item * = nullptr);
 };
-}
+}  // namespace SceneGraph
 
 #endif  // PLAYER_HPP

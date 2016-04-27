@@ -14,11 +14,11 @@ class Material {
   virtual Shader* shader() const = 0;
 };
 
-class ColorMaterial : public Material{
+class ColorMaterial : public Material {
  private:
   QColor m_color;
 
-  class ColorShader : public Shader, public QOpenGLFunctions  {
+  class ColorShader : public Shader, public QOpenGLFunctions {
    private:
     int m_matrix;
     int m_color;
@@ -101,6 +101,6 @@ class VertexColorMaterial : public Material {
  protected:
   inline Shader* shader() const { return Shader::get<VertexColorShader>(); }
 };
-}
+}  // namespace SceneGraph
 
 #endif  // MATERIAL_HPP

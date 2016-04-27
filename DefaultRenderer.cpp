@@ -50,4 +50,4 @@ void DefaultRenderer::render() {
   glActiveTexture(GL_TEXTURE0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-}
+}  // namespace SceneGraph

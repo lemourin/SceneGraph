@@ -39,4 +39,4 @@ void BaseObject::removeChild(BaseObject* node) {
 
   node->m_parent = node->m_prev = node->m_next = nullptr;
 }
-}
+}  // namespace SceneGraph

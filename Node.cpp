@@ -54,4 +54,4 @@ GeometryNode::GeometryNode(Node* parent)
 
 TransformNode::TransformNode(Node* parent)
     : Node(parent, Type::TransformNode) {}
-}
+}  // namespace SceneGraph

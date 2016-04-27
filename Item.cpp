@@ -217,4 +217,4 @@ void Item::invalidateSubtree() {
   invalidate();
   for (Item* i = firstChild(); i; i = i->next()) i->invalidateSubtree();
 }
-}
+}  // namespace SceneGraph

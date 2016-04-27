@@ -93,4 +93,4 @@ void ShaderSource::ShaderNode::update(ShaderSource* i) {
   m_viewport = i->m_sourceRect;
   m_size = i->m_textureSize;
 }
-}
+}  // namespace SceneGraph

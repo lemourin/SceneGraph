@@ -60,4 +60,4 @@ void Camera::mouseMoveEvent(QMouseEvent* event) {
 
   updateMatrix();
 }
-}
+}  // namespace SceneGraph

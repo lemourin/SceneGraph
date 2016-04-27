@@ -66,6 +66,6 @@ class Geometry : public QOpenGLFunctions {
 
   static uint sizeOfType(GLuint type);
 };
-}
+}  // namespace SceneGraph
 
 #endif  // GEOMETRY_HPP

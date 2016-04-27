@@ -69,6 +69,6 @@ class TransformNode : public Node {
   inline const QMatrix4x4& matrix() const { return m_matrix; }
   inline void setMatrix(const QMatrix4x4& m) { m_matrix = m; }
 };
-}
+}  // namespace SceneGraph
 
 #endif  // NODE_HPP

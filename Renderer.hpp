@@ -70,6 +70,6 @@ class Renderer {
 
   inline uint frame() const { return m_frame; }
 };
-}
+}  // namespace SceneGraph
 
 #endif  // RENDERER_HPP

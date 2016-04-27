@@ -59,6 +59,6 @@ class Shader {
     return Private::SingletonImpl<T>::instance()->data();
   }
 };
-}
+}  // namespace SceneGraph
 
 #endif  // SHADER_HPP

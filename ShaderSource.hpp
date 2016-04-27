@@ -62,6 +62,6 @@ class ShaderSource : public SceneGraph::Item {
 
   void invalidate();
 };
-}
+}  // namespace SceneGraph
 
 #endif  // SHADERSOURCE_HPP

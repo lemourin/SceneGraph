@@ -113,4 +113,4 @@ void VertexColorMaterial::VertexColorShader::updateState(
 }
 
 TextureMaterial::TextureMaterial() : m_texture() {}
-}
+}  // namespace SceneGraph

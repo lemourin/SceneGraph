@@ -82,4 +82,4 @@ uint Geometry::sizeOfType(GLuint type) {
     return 0;
   }
 }
-}
+}  // namespace SceneGraph

@@ -171,4 +171,4 @@ QOpenGLTexture* Renderer::texture(const char* path) {
 }
 
 RenderState::RenderState(QMatrix4x4 m) : m_matrix(m) {}
-}
+}  // namespace SceneGraph

@@ -101,6 +101,6 @@ class Item : protected BaseObject {
   void updateSubtree();
   void invalidateSubtree();
 };
-}
+}  // namespace SceneGraph
 
 #endif  // ITEM_HPP

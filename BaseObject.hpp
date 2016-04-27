@@ -24,6 +24,6 @@ class BaseObject {
   inline BaseObject* firstChild() const { return m_firstChild; }
   inline BaseObject* lastChild() const { return m_lastChild; }
 };
-}
+}  // namespace SceneGraph
 
 #endif  // BASEOBJECT_HPP

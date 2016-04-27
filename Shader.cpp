@@ -23,4 +23,4 @@ void Shader::initialize() {
 
   m_initialized = true;
 }
-}
+}  // namespace SceneGraph

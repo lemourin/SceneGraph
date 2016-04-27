@@ -1,7 +1,7 @@
 #ifndef DEFAULTRENDERER_HPP
 #define DEFAULTRENDERER_HPP
-#include "Renderer.hpp"
 #include <QOpenGLFunctions>
+#include "Renderer.hpp"
 
 namespace SceneGraph {
 
@@ -14,6 +14,6 @@ class DefaultRenderer : public Renderer, public QOpenGLFunctions {
 
   void render();
 };
-}
+}  // namespace SceneGraph
 
 #endif  // DEFAULTRENDERER_HPP
