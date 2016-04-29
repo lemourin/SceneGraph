@@ -97,8 +97,9 @@ void Window::onBeforeSynchronizing() { m_renderer->synchronize(this); }
 void Window::onItemDestroyed(Item* item) {
   cancelUpdate(item);
 
-  if (m_timerMap.find(item) != m_timerMap.end()) {
-    std::unordered_set<int> timer = m_timerMap[item];
+  auto it = m_timerMap.find(item);
+  if (it != m_timerMap.end()) {
+    std::unordered_set<int> timer = it->second;
     for (int t : timer) removeTimer(item, t);
   }
 
@@ -119,9 +120,6 @@ void Window::scheduleUpdate(Item* item) {
   if (!(item->m_state & Item::ScheduledUpdate)) {
     m_updateItem.push_back(item);
     item->m_state |= Item::ScheduledUpdate;
-  } else {
-    assert(std::find(m_updateItem.begin(), m_updateItem.end(), item) !=
-           m_updateItem.end());
   }
 }
 
@@ -143,13 +141,15 @@ int Window::installTimer(Item* item, int interval) {
 }
 
 void Window::removeTimer(Item* item, int timerId) {
-  std::unordered_set<int>& set = m_timerMap[item];
-  assert(set.find(timerId) != set.end());
+  auto setIt = m_timerMap.find(item);
+  std::unordered_set<int>& set = setIt->second;
+  auto it = set.find(timerId);
+  assert(it != set.end());
 
-  set.erase(set.find(timerId));
+  set.erase(it);
   killTimer(timerId);
 
-  if (set.empty()) m_timerMap.erase(m_timerMap.find(item));
+  if (set.empty()) m_timerMap.erase(setIt);
 }
 
 void Window::keyPressEvent(QKeyEvent* event) {
