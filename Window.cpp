@@ -41,7 +41,7 @@ Window::Window(QWindow* parent)
   connect(this, &QQuickWindow::beforeSynchronizing, this,
           &Window::onBeforeSynchronizing, Qt::DirectConnection);
 
-  connect(this, &QWindow::activeChanged, this, &Window::onActiveChanged);
+  connect(this, &QWindow::activeChanged, this, &Window::fixCursor);
 
   setResizeMode(SizeRootObjectToView);
   setClearBeforeRendering(false);
@@ -59,7 +59,7 @@ Window::~Window() {
              &Window::onBeforeRendering);
   disconnect(this, &QQuickWindow::beforeSynchronizing, this,
              &Window::onBeforeSynchronizing);
-  unlockCursor();
+  setAllowLockCursor(false);
 }
 
 void Window::setProjection(const QMatrix4x4& m) {
@@ -297,9 +297,8 @@ void Window::resizeEvent(QResizeEvent* event) {
   QQuickView::resizeEvent(event);
   m_rootItem.setSize(event->size());
   scheduleSynchronize();
-#ifdef Q_OS_WIN
-  if (lockedCursor() && allowLockCursor()) lockCursor();
-#endif
+
+  fixCursor();
 }
 
 Window::RootItem::RootItem(Window* w, QQuickItem* parent)
@@ -313,22 +312,50 @@ void Window::RootItem::touchEvent(QTouchEvent* e) {
 void Window::setLockedCursor(bool e) {
   if (m_lockedCursor == e) return;
   m_lockedCursor = e;
-  if (e) {
-    if (allowLockCursor())
-      lockCursor();
-  } else {
-    if (allowLockCursor())
-      unlockCursor();
-  }
+  fixCursor();
 }
 
 void Window::setAllowLockCursor(bool e) {
   if (m_allowLockCursor == e) return;
   m_allowLockCursor = e;
-  if (e) {
-    if (lockedCursor()) lockCursor();
-  } else {
-    if (lockedCursor()) unlockCursor();
+  fixCursor();
+}
+
+void Window::setFullScreen(bool e) {
+  if (fullscreen() == e) return;
+
+  hide();
+
+  if (e)
+    showFullScreen();
+  else
+    show();
+}
+
+bool Window::fullscreen() const { return visibility() == QWindow::FullScreen; }
+
+Window::System Window::system() const {
+#if defined Q_OS_ANDROID
+  return System::Android;
+#elif defined Q_OS_UNIX
+  return System::Unix;
+#elif defined Q_OS_WIN32
+  return System::Win32;
+#else
+  return System::Unknown;
+#endif
+}
+
+std::string Window::systemToString(System system) {
+  switch (system) {
+    case System::Android:
+      return "android";
+    case System::Unix:
+      return "unix";
+    case System::Win32:
+      return "win32";
+    case System::Unknown:
+      return "unknown";
   }
 }
 
@@ -364,12 +391,11 @@ bool Window::unlockCursor() {
 #endif
 }
 
-void Window::onActiveChanged() {
-  if (lockedCursor() && allowLockCursor()) {
-    if (isActive())
-      assert(lockCursor());
-    else
-      unlockCursor();
-  }
+void Window::fixCursor() {
+  if (lockedCursor() && allowLockCursor() && isActive())
+    lockCursor();
+  else
+    unlockCursor();
 }
+
 }  // namespace SceneGraph

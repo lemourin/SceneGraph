@@ -58,10 +58,10 @@ class Window : public QQuickView {
   int installTimer(Item*, int interval);
   void removeTimer(Item*, int timerId);
 
-  void onActiveChanged();
-
   bool lockCursor();
   bool unlockCursor();
+
+  void fixCursor();
 
  protected:
   void keyPressEvent(QKeyEvent*);
@@ -75,6 +75,8 @@ class Window : public QQuickView {
   void resizeEvent(QResizeEvent*);
 
  public:
+  enum class System { Android, Unix, Win32, Unknown };
+
   Window(QWindow* window = nullptr);
   ~Window();
 
@@ -93,6 +95,13 @@ class Window : public QQuickView {
 
   inline bool allowLockCursor() const { return m_allowLockCursor; }
   void setAllowLockCursor(bool);
+
+  void setFullScreen(bool);
+  bool fullscreen() const;
+
+  System system() const;
+
+  static std::string systemToString(System);
 };
 }  //  namespace SceneGraph
 
