@@ -1,5 +1,6 @@
 #ifndef SCENEGRAPH_WINDOW_HPP
 #define SCENEGRAPH_WINDOW_HPP
+#include <QElapsedTimer>
 #include <QQuickItem>
 #include <QQuickView>
 #include <memory>
@@ -44,6 +45,11 @@ class Window : public QQuickView {
 
   bool m_lockedCursor;
   bool m_allowLockCursor;
+
+  std::string m_glVersion;
+
+  qreal m_fps;
+  QElapsedTimer m_fpscounter;
 
   void onSceneGraphInitialized();
   void onSceneGraphInvalidated();
@@ -100,6 +106,7 @@ class Window : public QQuickView {
   bool fullscreen() const;
 
   System system() const;
+  inline qreal fps() const { return m_fps; }
 
   static std::string systemToString(System);
 };

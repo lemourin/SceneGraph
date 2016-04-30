@@ -11,7 +11,10 @@
 
 namespace SceneGraph {
 
-Renderer::Renderer() : m_root(), m_frame(1) {}
+Renderer::Renderer() : m_root(), m_frame(1) {
+  initializeOpenGLFunctions();
+  m_glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+}
 
 Renderer::~Renderer() {}
 

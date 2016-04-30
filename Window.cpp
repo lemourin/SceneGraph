@@ -29,8 +29,10 @@ Window::Window(QWindow* parent)
       m_renderer(),
       m_focusItem(),
       m_lockedCursor(),
-      m_allowLockCursor(true) {
+      m_allowLockCursor(true),
+      m_fps() {
   m_root.setWindow(this);
+  m_fpscounter.restart();
 
   connect(this, &QQuickWindow::sceneGraphInitialized, this,
           &Window::onSceneGraphInitialized, Qt::DirectConnection);
@@ -75,6 +77,7 @@ QOpenGLTexture* Window::texture(const char* path) {
 
 void Window::onSceneGraphInitialized() {
   m_renderer = std::make_unique<DefaultRenderer>();
+  m_glVersion = m_renderer->glVersion();
   m_renderer->setRoot(rootItem());
   rootItem()->updateSubtree();
 }
@@ -92,7 +95,11 @@ void Window::onBeforeRendering() {
   m_renderer->render();
 }
 
-void Window::onBeforeSynchronizing() { m_renderer->synchronize(this); }
+void Window::onBeforeSynchronizing() {
+  qint64 t = m_fpscounter.restart();
+  if (t != 0) m_fps = 1000.0 / t;
+  m_renderer->synchronize(this);
+}
 
 void Window::onItemDestroyed(Item* item) {
   cancelUpdate(item);
@@ -324,8 +331,6 @@ void Window::setAllowLockCursor(bool e) {
 void Window::setFullScreen(bool e) {
   if (fullscreen() == e) return;
 
-  hide();
-
   if (e)
     showFullScreen();
   else
@@ -365,8 +370,7 @@ bool Window::lockCursor() {
                       GrabModeAsync, winId(), None, CurrentTime) != GrabSuccess)
     sleep(1);
   return true;
-#endif
-#ifdef Q_OS_WIN
+#elif defined Q_OS_WIN
   QPoint p1 = mapToGlobal(QPoint(0, 0));
   QPoint p2 = mapToGlobal(QPoint(width(), height()));
   RECT rect;
@@ -376,6 +380,8 @@ bool Window::lockCursor() {
   rect.bottom = p2.y();
   ClipCursor(&rect);
   return true;
+#elif
+  return false;
 #endif
 }
 
@@ -384,10 +390,11 @@ bool Window::unlockCursor() {
   XUngrabPointer(QX11Info::display(), CurrentTime);
   XFlush(QX11Info::display());
   return true;
-#endif
-#ifdef Q_OS_WIN
+#elif defined Q_OS_WIN
   ClipCursor(0);
   return true;
+#elif
+  return false;
 #endif
 }
 

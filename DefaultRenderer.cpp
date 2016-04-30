@@ -7,7 +7,7 @@
 #include "Shader.hpp"
 namespace SceneGraph {
 
-DefaultRenderer::DefaultRenderer() : Renderer() { initializeOpenGLFunctions(); }
+DefaultRenderer::DefaultRenderer() : Renderer() {}
 
 void DefaultRenderer::renderGeometryNode(GeometryNode* node,
                                          const RenderState& state) {

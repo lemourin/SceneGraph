@@ -1,6 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 #include <QMatrix4x4>
+#include <QOpenGLFunctions>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -29,7 +30,7 @@ class RenderState {
   inline const QMatrix4x4& matrix() const { return m_matrix; }
 };
 
-class Renderer {
+class Renderer : public QOpenGLFunctions {
  private:
   friend class Node;
 
@@ -39,6 +40,7 @@ class Renderer {
   uint m_frame;
   std::unordered_map<std::string, std::unique_ptr<QOpenGLTexture>> m_texture;
   std::unordered_set<Node*> m_preprocess;
+  std::string m_glVersion;
 
   void updateItem(Item*);
   void updateNodes(Window*);
@@ -69,6 +71,7 @@ class Renderer {
   QOpenGLTexture* texture(const char* path);
 
   inline uint frame() const { return m_frame; }
+  inline std::string glVersion() const { return m_glVersion; }
 };
 }  // namespace SceneGraph
 
