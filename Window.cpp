@@ -380,7 +380,7 @@ bool Window::lockCursor() {
   rect.bottom = p2.y();
   ClipCursor(&rect);
   return true;
-#elif
+#else
   return false;
 #endif
 }
@@ -393,7 +393,7 @@ bool Window::unlockCursor() {
 #elif defined Q_OS_WIN
   ClipCursor(0);
   return true;
-#elif
+#else
   return false;
 #endif
 }
