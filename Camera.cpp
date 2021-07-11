@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 #include "Geometry.hpp"
 #include "Window.hpp"
+#include <cmath>
 
 namespace SceneGraph {
 
